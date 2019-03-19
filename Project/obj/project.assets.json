@@ -672,11 +672,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Casa\\Desktop\\Cooklang\\Cooklang.csproj",
+      "projectUniqueName": "c:\\Users\\Casa\\Downloads\\Github\\cooklang\\Project\\Cooklang.csproj",
       "projectName": "Cooklang",
-      "projectPath": "C:\\Users\\Casa\\Desktop\\Cooklang\\Cooklang.csproj",
+      "projectPath": "c:\\Users\\Casa\\Downloads\\Github\\cooklang\\Project\\Cooklang.csproj",
       "packagesPath": "C:\\Users\\Casa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Casa\\Desktop\\Cooklang\\obj\\",
+      "outputPath": "c:\\Users\\Casa\\Downloads\\Github\\cooklang\\Project\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

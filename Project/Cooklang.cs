@@ -5,19 +5,17 @@ using System.Globalization;
 namespace CookLang
 {
   public class CookCompiler
-  {
+  {  
+    readonly CultureInfo ci = new CultureInfo("en-US");
+
+    Dictionary<string, Action<String>> customEvents; 
+    Dictionary<string, string> variables;
+    Dictionary<string, int> zones;
+    Stack<int> returnStack;
+
     string[] lines;
     int pointer;
     bool running = true;
-    
-    Dictionary<string, Action<String>> customEvents = new Dictionary<string, Action<String>>(); 
-    
-    Dictionary<string, string> variables = new Dictionary<string, string>();
-    Dictionary<string, int> zones = new Dictionary<string, int>();
-
-    Stack<int> returnStack = new Stack<int>();
-    CultureInfo ci = new CultureInfo("en-US");
-
     string error = "";
     
     public CookCompiler(string code)
@@ -25,14 +23,50 @@ namespace CookLang
       Clean(code);
       SetZones();
       Initialize();
-      SetCustomEvents();
+      SetVariables();
+      SetEvents();
     }
-    public void SetCustomEvents()
+
+    void Clean(string code)
     {
-      customEvents = new Dictionary<string, Action<String>>(); 
+      while(code.Contains("  "))
+      {
+        code = code.Replace("  ", " ");
+      }
+      code = code.Replace("\r", "").Replace("\n","").Replace("\t","");        
+      lines = code.Split(';');
+    }
+
+    void Initialize()
+    {
+      returnStack = new Stack<int>();
+      customEvents = new Dictionary<string, Action<String>>();
+      variables = new Dictionary<string, string>();
+      
+      pointer = 0;
+    }
+
+    void SetZones()
+    {
+      zones = new Dictionary<string, int>();
+      for(int i = 0 ; i < lines.Length; i++)
+      {
+        if(lines[i].StartsWith("Zone", true, ci))
+        {
+          string zone = lines[i].Substring(4);
+          zone = RemoveSpacesAtStart(zone);
+          zones.Add(zone, i);
+        }
+      }
+    }
+    void SetVariables()
+    {
+      variables.Add("Temporal", "");
+    }
+    void SetEvents()
+    {
       this.customEvents.Add("Print", Console.WriteLine);
       this.customEvents.Add("Error", Console.Error.WriteLine);
-
     }
     public void SetCustomEvents(Dictionary<string, Action<String>> customEvents)
     {
@@ -47,15 +81,16 @@ namespace CookLang
         this.customEvents.Add("Error", Console.Error.WriteLine);
       }
     }
-
-    void Initialize()
+    public void SetCustomVariables(Dictionary<string, string> variables)
     {
-      returnStack = new Stack<int>();
-      variables = new Dictionary<string, string>();
-      variables.Add("Temporal", "");
-      pointer = 0;
-    }
+      this.variables = variables;
 
+      if(!this.variables.ContainsKey("Temporal"))
+      {
+        variables.Add("Temporal", "");
+      }
+    }
+    
     public bool TicTac(bool startFromZero = false)
     {
       bool tic = true;
@@ -74,7 +109,7 @@ namespace CookLang
         customEvents["Error"].Invoke("Error: " + error);
         tic = false;
       }
-      else
+      if(!running)
       {
         customEvents["Print"].Invoke("Succeedful runtime");
         tic = false;
@@ -102,20 +137,6 @@ namespace CookLang
         customEvents["Print"].Invoke("Succeedful runtime");
       }
     }
-
-    void SetZones()
-    {
-      for(int i = 0 ; i < lines.Length; i++)
-      {
-        if(lines[i].StartsWith("Zone", true, ci))
-        {
-          string zone = lines[i].Substring(4);
-          zone = RemoveSpacesAtStart(zone);
-          zones.Add(zone, i);
-        }
-      }
-    }
-
 
     void Run(string code)
     {
@@ -146,43 +167,43 @@ namespace CookLang
         pointer ++;
         return;
       }
-      if(lines[pointer].StartsWith("Print", true, ci))
+      if(lines[pointer].StartsWith("PRINT", true, ci))
       {
         var l = ApplyVariablesInString(lines[pointer].Substring(5));
         customEvents["Print"].Invoke(l);
         pointer ++;
         return;
       }
-      if(lines[pointer].StartsWith("JumpTo", true, ci))
+      if(lines[pointer].StartsWith("JUMPTO", true, ci))
       {
         returnStack.Push(pointer);
         JumpTo(lines[pointer].Substring(6));
         return;
       }
-      if(lines[pointer].StartsWith("Jump", true, ci))
+      if(lines[pointer].StartsWith("JUMP", true, ci))
       {
         returnStack.Push(pointer);
         Jump(lines[pointer].Substring(4));
         return;
       }
-      if(lines[pointer].StartsWith("Assign", true, ci))
+      if(lines[pointer].StartsWith("ASSIGN", true, ci))
       {
         Assign(lines[pointer].Substring(6));
         pointer ++;
         return;
       }
-      if(lines[pointer].StartsWith("Update", true, ci))
+      if(lines[pointer].StartsWith("UPDATE", true, ci))
       {
         Update(lines[pointer].Substring(6));
         pointer ++;
         return;
       }
-      if(lines[pointer].StartsWith("If", true, ci))
+      if(lines[pointer].StartsWith("IF", true, ci))
       {
         IfJumpTo(lines[pointer].Substring(2));
         return;
       }
-      if(lines[pointer].StartsWith("Operation", true, ci))
+      if(lines[pointer].StartsWith("OPERATION", true, ci))
       {
         Operation(lines[pointer].Substring(9));
         pointer ++;
@@ -191,15 +212,18 @@ namespace CookLang
 
       foreach(var key in customEvents.Keys)
       {
-        if(lines[pointer].StartsWith("key", true, ci))
+        if(lines[pointer].StartsWith(key, true, ci))
         {
-          customEvents[key].Invoke(lines[pointer]);
+          var line = lines[pointer];
+          line = ApplyVariablesInString(line);
+          line = line.Substring(key.Length);
+
+          customEvents[key].Invoke(line);
+
           pointer ++;
           return;
         }
       }
-
-
       error = $"Command not found in line {pointer}";
       return;
     }
@@ -213,8 +237,6 @@ namespace CookLang
         error = $"Unexpected entry at {pointer}";
         return;
       }
-
-
       bool result = false;
       try
       {
@@ -339,7 +361,6 @@ namespace CookLang
       }
 
     }
-
     string ApplyVariablesInString(string line)
     {
         foreach(var item in variables)
@@ -355,14 +376,5 @@ namespace CookLang
         line = line.Substring(1);
       return line;
     }
-    void Clean(string code)
-    {
-      while(code.Contains("  ")) 
-        code = code.Replace("  ", " ");
-      code = code.Replace("\r", "").Replace("\n","").Replace("\t","");        
-      lines = code.Split(';');
-    }
-    
-
   }
 }

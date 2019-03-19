@@ -7,7 +7,13 @@ Coocklang is a mock programing language made with C# just for fun,  usemode is s
 
 ## TODO
 - More examples
-- I want to make an Unity implementation...
+- ~~ I want to make an Unity implementation... ~~
+
+## Examples
+The project contains 3 different examples
+- Factorial: y'know 5! = 1x2x3x4x5
+- Fibonacci: like the bunnies, 1,1,2,3,5,8...
+- Unity integration: This script makes a rigidbody to jump every 4 seconds, useful for a modding system
 
 ## How it works
 Just like the basic turing machine, we have an pointer that moves arround the code, every line is an action, Every acction has a name, like 'print' or 'operation' the rest of the line is the "Argument". Every line must end with a semicolon ";" and every code must end with the end command
@@ -28,7 +34,7 @@ Print {myVariable};
 ### Jump
 The pointer moves top to bottom for default, but you can change the flow by the command 
 ```
-jump +1;
+Jump +1;
 ```
 the argument of jump can be a number like 1, 5 or 99, that means that the pointer will move to that line, but the argument cant also be a number with sign, that means the pointer will move to the current line plus (or minus) the number.
 Also exist the Jumpto command.
@@ -37,23 +43,23 @@ JumpTo myZone;
 ```
 This command is like a jump but instead of jump to a specific line, jumps to a zone
 ```
-zone myZone;
+Zone myZone;
 ```
 A zone is a specific line of the code where the pointer can jump easily
 
 ### Variables
 You can set a variable just like this
 ```
-assign variableName Value of the variable;
+Assign variableName Value of the variable;
 ```
 to update a variable you can use the command update
 ```
-update variableName other value;
+Update variableName other value;
 ```
 There are some reserved variable names like "Temporal", this variable keeps the value of an operation, like this
 ```
 Operation {variable1} / 10 ;
-assign operationResult {Temporal};
+Assign operationResult {Temporal};
 ```
 ### Comments
 The line of code that starts with a # will be ignored, like.
@@ -65,24 +71,24 @@ The line of code that starts with a # will be ignored, like.
 Like almost every language, this one have if statements, but this works a little different, this works like this
 ```
 #x is 16
-if {{x} < 15} jumpto 1;
-print this will not be printed;
-print this WILL be printed;
+If {{x} < 15} jumpto 1;
+Print this will not be printed;
+Print this WILL be printed;
 ```
 thats a medium complex example, a simpler statement could be
 ```
-if true jumpto 3;
-print this will not be printed;
-print this will not be printed;
-print this will not be printed;
-print this WILL be printed;
+If true jumpto 3;
+Print this will not be printed;
+Print this will not be printed;
+Print this will not be printed;
+Print this WILL be printed;
 ```
 but the if statement can be as complex you want
 ```
-assign x 20;
-if {{{x} >= 15} and (not{{x} = 20}}) jumpto 1;
-print not will be printed;
-print will be printed;
+Assign x 20;
+If {{{x} >= 15} and (not{{x} = 20}}) jumpto 1;
+Print not will be printed;
+Print will be printed;
 ```
 #### just some rules: 
 - you cant not make aritmetic operations in if statements
@@ -139,6 +145,7 @@ compiler.TicTac();
 
 ## More interesting projects
 I have a lot of fun projects, check this:
+
 ### Machine learning
 - https://github.com/HectorPulido/Evolutionary-Neural-Networks-on-unity-for-bots
 - https://github.com/HectorPulido/Imitation-learning-in-unity
