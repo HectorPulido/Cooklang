@@ -7,88 +7,85 @@ Coocklang is a mock programing language made with C# just for fun,  usemode is s
 
 ## TODO
 - More examples
-- ~~ I want to make an Unity implementation... ~~
+- ~~Unity implementation~~
 
 ## Examples
 The project contains 3 different examples
 - Factorial: y'know 5! = 1x2x3x4x5
 - Fibonacci: like the bunnies, 1,1,2,3,5,8...
-- Unity integration: This script makes a rigidbody to jump every 4 seconds, useful for a modding system
+- Unity integration: This script makes a rigidbody to jump every x seconds, useful for a modding system
 
 ## How it works
 Just like the basic turing machine, we have an pointer that moves arround the code, every line is an action, Every acction has a name, like 'print' or 'operation' the rest of the line is the "Argument". Every line must end with a semicolon ";" and every code must end with the end command
 ```
-End
+end
 ```
 the commands are not case sensitive
 
 ### Print
 This command shows something in the console
 ```
-Print Hello world;
+print Hello world;
 ```
 the command also can print a variable, but lets talk about that later
 ```
-Print {myVariable};
+print {myVariable};
 ```
 ### Jump
 The pointer moves top to bottom for default, but you can change the flow by the command 
 ```
-Jump +1;
+jump +1;
 ```
 the argument of jump can be a number like 1, 5 or 99, that means that the pointer will move to that line, but the argument cant also be a number with sign, that means the pointer will move to the current line plus (or minus) the number.
 Also exist the Jumpto command.
 ```
-JumpTo myZone;
+jumpto myZone;
 ```
 This command is like a jump but instead of jump to a specific line, jumps to a zone
 ```
-Zone myZone;
+zone myZone;
 ```
 A zone is a specific line of the code where the pointer can jump easily
 
 ### Variables
-You can set a variable just like this
+You can set or modify a variable just like this
 ```
-Assign variableName Value of the variable;
+assign variableName Value of the variable;
 ```
-to update a variable you can use the command update
-```
-Update variableName other value;
-```
+
 There are some reserved variable names like "Temporal", this variable keeps the value of an operation, like this
 ```
-Operation {variable1} / 10 ;
-Assign operationResult {Temporal};
+operation {variable1} / 10 ;
+assign operationResult {Temporal};
 ```
 ### Comments
-The line of code that starts with a # will be ignored, like.
+The line of code that starts with a # or any other special character will be ignored, like.
 ```
-#This is a comment, will be ignored by the compiler;
-#But still must end with ;
+# This is a comment, will be ignored by the compiler;
+@ But still must end with ;
 ```
 ### Conditinals
 Like almost every language, this one have if statements, but this works a little different, this works like this
 ```
 #x is 16
-If {{x} < 15} jumpto 1;
-Print this will not be printed;
-Print this WILL be printed;
+ir {{x} < 15} jumpto 1;
+print this will not be printed;
+print this WILL be printed;
 ```
 thats a medium complex example, a simpler statement could be
 ```
-If true jumpto 3;
-Print this will not be printed;
-Print this will not be printed;
-Print this will not be printed;
-Print this WILL be printed;
+if true jumpto 3;
+print this will not be printed;
+print this will not be printed;
+print this will not be printed;
+print this WILL be printed;
 ```
 but the if statement can be as complex you want
 ```
-Assign x 20;
-If {{{x} >= 15} and (not{{x} = 20}}) jumpto 1;
-Print not will be printed;
-Print will be printed;
+assign x 20;
+if {{{x} >= 15} and (not{{x} = 20}}) jumpto 1;
+print not will be printed;
+print will be printed;
 ```
 #### just some rules: 
 - you cant not make aritmetic operations in if statements
@@ -119,28 +116,36 @@ using CookLang;
 ```
 To use it just create a new compiler (indeed is an interpreter but... you know) and run it.
 ```Csharp
-var conpiler = new CookCompiler(code);
-conpiler.Run();
+var compiler = new CookCompiler(code);
+compiler.Run();
 ```
-You can also add new actions to the compiler like this
-```Csharp
-Dictionary<string, Action<String>> customEvents = New Dictionary<string, Action<String>();
 
+You can also add new actions and initial variables to the compiler like this
+```Csharp
+var customEvents = new Dictionary<string, Action<CookCompiler, string>>();
 customEvents.Add("MyCustomAction", MyFunction);
 //Or just
-customEvents.Add("MyOtherCustomAction", (args)=>{
+customEvents.Add("MyOtherCustomAction", (m, args)=>{
     Console.WriteLine(args + " foo");
 });
 
-Compiler.SetCustomEvents(customEvents);
+var customVariables = new Dictionary<string, string>();
+customVariables.Add("myVariable", jumpTime.ToString());
+
+var compiler = new CookCompiler(code, customVariables, customEvents);
+compiler.Run();
 ```
 
 You also can execute the code line by line with this
 ```Csharp
+var sw = true;
 var compiler = new CookCompiler(code);
-compiler.TicTac();
-foo();
-compiler.TicTac();
+while(sw)
+{
+    cook.NextStep();
+    sw = cook.running;
+    foo();
+}
 ```
 
 ## More interesting projects
