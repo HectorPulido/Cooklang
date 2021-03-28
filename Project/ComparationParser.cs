@@ -78,7 +78,7 @@ namespace CookLang
                 {
                     try
                     {
-                        resp = int.Parse(v[0]) >= int.Parse(v[1]) ? "true" : "false";
+                        resp = int.Parse(v[0], Utils.usNumberFormat) >= int.Parse(v[1], Utils.usNumberFormat) ? "true" : "false";
                     }
                     catch
                     {
@@ -98,7 +98,7 @@ namespace CookLang
                 {
                     try
                     {
-                        resp = int.Parse(v[0]) <= int.Parse(v[1]) ? "true" : "false";
+                        resp = int.Parse(v[0], Utils.usNumberFormat) <= int.Parse(v[1], Utils.usNumberFormat) ? "true" : "false";
                     }
                     catch
                     {
@@ -117,7 +117,7 @@ namespace CookLang
                 {
                     try
                     {
-                        resp = int.Parse(v[0]) > int.Parse(v[1]) ? "true" : "false";
+                        resp = int.Parse(v[0], Utils.usNumberFormat) > int.Parse(v[1], Utils.usNumberFormat) ? "true" : "false";
                     }
                     catch
                     {
@@ -138,7 +138,7 @@ namespace CookLang
                 {
                     try
                     {
-                        resp = int.Parse(v[0]) < int.Parse(v[1]) ? "true" : "false";
+                        resp = int.Parse(v[0], Utils.usNumberFormat) < int.Parse(v[1], Utils.usNumberFormat) ? "true" : "false";
                     }
                     catch
                     {

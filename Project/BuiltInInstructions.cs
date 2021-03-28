@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 
 namespace CookLang
 {
-    public static class BuildInInstructions
+    public static class BuiltInInstructions
     {
+
         public static void IfJumpTo(CookCompiler machine, string line)
         {
             var operators = line.Split(new[] { "jumpto" }, StringSplitOptions.None);
@@ -28,7 +28,7 @@ namespace CookLang
             if (result)
             {
                 machine.returnStack.Push(machine.pointer);
-                machine.pointer += int.Parse(operators[1]) + 1;
+                machine.pointer += int.Parse(operators[1], Utils.usNumberFormat) + 1;
                 return;
             }
             machine.pointer++;
@@ -110,8 +110,8 @@ namespace CookLang
         {
             var v = line.Split(' ');
             var name = v[0].Trim();
-            var id1 = int.Parse(v[1].Trim());
-            var id2 = v.Length == 3 ? int.Parse(v[2].Trim()) : -1;
+            var id1 = int.Parse(v[1].Trim(), Utils.usNumberFormat);
+            var id2 = v.Length == 3 ? int.Parse(v[2].Trim(), Utils.usNumberFormat) : -1;
 
             machine.pointer++;
 
@@ -132,6 +132,7 @@ namespace CookLang
 
         public static void JumpTo(CookCompiler machine, string zoneToJump)
         {
+            machine.returnStack.Push(machine.pointer);
             if (machine.zones.ContainsKey(zoneToJump))
             {
                 machine.pointer = machine.zones[zoneToJump];

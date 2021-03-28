@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+
 
 namespace CookLang
 {
@@ -8,6 +8,7 @@ namespace CookLang
         public static double? Evaluator(string input)
         {
             input = input.Replace(" ", "");
+            input = input.Replace(".", ",");
 
             if (input.Contains("(") || input.Contains(")"))
             {
@@ -78,8 +79,8 @@ namespace CookLang
                 {
                     if (OperationList[index] == "/")
                     {
-                        double div1 = double.Parse(OperationList[index - 1]);
-                        double div2 = double.Parse(OperationList[index + 1]);
+                        double div1 = double.Parse(OperationList[index - 1], Utils.usNumberFormat);
+                        double div2 = double.Parse(OperationList[index + 1], Utils.usNumberFormat);
                         OperationList[index - 1] = (div1 / div2).ToString();
                         OperationList.RemoveAt(index);
                         OperationList.RemoveAt(index);
@@ -91,8 +92,8 @@ namespace CookLang
                 {
                     if (OperationList[index] == "*")
                     {
-                        double mult1 = double.Parse(OperationList[index - 1]);
-                        double mult2 = double.Parse(OperationList[index + 1]);
+                        double mult1 = double.Parse(OperationList[index - 1], Utils.usNumberFormat);
+                        double mult2 = double.Parse(OperationList[index + 1], Utils.usNumberFormat);
                         OperationList[index - 1] = (mult1 * mult2).ToString();
                         OperationList.RemoveAt(index);
                         OperationList.RemoveAt(index);
@@ -104,8 +105,8 @@ namespace CookLang
                 {
                     if (OperationList[index] == "-")
                     {
-                        double res1 = double.Parse(OperationList[index - 1]);
-                        double res2 = double.Parse(OperationList[index + 1]);
+                        double res1 = double.Parse(OperationList[index - 1], Utils.usNumberFormat);
+                        double res2 = double.Parse(OperationList[index + 1], Utils.usNumberFormat);
                         OperationList[index - 1] = (res1 - res2).ToString();
                         OperationList.RemoveAt(index);
                         OperationList.RemoveAt(index);
@@ -117,8 +118,8 @@ namespace CookLang
                 {
                     if (OperationList[index] == "+")
                     {
-                        double sum1 = double.Parse(OperationList[index - 1]);
-                        double sum2 = double.Parse(OperationList[index + 1]);
+                        double sum1 = double.Parse(OperationList[index - 1], Utils.usNumberFormat);
+                        double sum2 = double.Parse(OperationList[index + 1], Utils.usNumberFormat);
                         OperationList[index - 1] = (sum1 + sum2).ToString();
                         OperationList.RemoveAt(index);
                         OperationList.RemoveAt(index);
@@ -126,7 +127,7 @@ namespace CookLang
                     index++;
                 }
             }
-            return double.Parse(OperationList[0]);
+            return double.Parse(OperationList[0], Utils.usNumberFormat);
         }
         static List<string> OperationParser(string input)
         {
@@ -175,7 +176,7 @@ namespace CookLang
         }
         static int CharEvaluator(string input)
         {
-            if ("0987654321.,".Contains(input))
+            if ("0987654321,".Contains(input))
                 return 0;
             else if ("/*-+".Contains(input))
                 return 1;

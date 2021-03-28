@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace CookLang
 {
@@ -83,15 +82,15 @@ namespace CookLang
         )
         {
             instructions.Add("error", (m, s) => Console.WriteLine(s));
-            instructions.Add("print", BuildInInstructions.Print);
-            instructions.Add("jumpto", BuildInInstructions.JumpTo);
-            instructions.Add("return", BuildInInstructions.Return);
-            instructions.Add("end", BuildInInstructions.End);
-            instructions.Add("jump", BuildInInstructions.Jump);
-            instructions.Add("assign", BuildInInstructions.Assign);
-            instructions.Add("operation", BuildInInstructions.Operation);
-            instructions.Add("if", BuildInInstructions.IfJumpTo);
-            instructions.Add("getvalue", BuildInInstructions.GetValue);
+            instructions.Add("print", BuiltInInstructions.Print);
+            instructions.Add("jumpto", BuiltInInstructions.JumpTo);
+            instructions.Add("return", BuiltInInstructions.Return);
+            instructions.Add("end", BuiltInInstructions.End);
+            instructions.Add("jump", BuiltInInstructions.Jump);
+            instructions.Add("assign", BuiltInInstructions.Assign);
+            instructions.Add("operation", BuiltInInstructions.Operation);
+            instructions.Add("if", BuiltInInstructions.IfJumpTo);
+            instructions.Add("getvalue", BuiltInInstructions.GetValue);
 
             if (customInstructions != null)
             {

@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace CookLang
 {
     public static class Utils
     {
+
+        public static readonly NumberFormatInfo usNumberFormat = new CultureInfo("es").NumberFormat;
+
         public static void AddRange<T, K>(this Dictionary<T, K> target, Dictionary<T, K> source)
         {
             if (target == null)
