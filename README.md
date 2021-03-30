@@ -1,5 +1,6 @@
 # CookLang - A mock programing language
-Coocklang is a mock programing language made with C# just for fun,  usemode is similar to ASM.
+Coocklang is a mock programing language made with C# just for fun, sintaxis is similar to ASM.
+[![youtube video](https://img.youtube.com/vi/hvVg72uCMt4/0.jpg)](https://www.youtube.com/watch?v=hvVg72uCMt4&list=PLHdk97dabfvzTZyKLb_spWHvI-qLArEzm&index=4)
 
 ## Features
 - Custom actions and commands 
